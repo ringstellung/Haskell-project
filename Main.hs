@@ -1,10 +1,11 @@
 module Main where
 
 import System.IO
+import Data.List  -- para tener ucons
+import Data.Maybe -- para tener fromJust
 import Pila
 
 menu :: IO Char
-
 menu = do
         putStrLn "Programa ejemplo de manejo de pilas"
         putStrLn "   m.- Meter elemento en pila "
@@ -13,15 +14,12 @@ menu = do
         putStrLn "   f.- Finalizar programa "
         putStrLn "------------------------- Teclee opcion: "
         cad <- getLine
-        let x = head cad
-        if elem x "msvf" then return x 
-                              else menu
+        -- let x = head cad
+        let x = fst.fromJust.uncons $ cad
+        if elem x "msvf" then return x
+          else menu
 
-main :: IO()
-
-main = bucle vacia
-
-bucle :: TPila Int -> IO()
+bucle :: TPila Int -> IO ()
 bucle p = do
            opc <- menu
            putStrLn ("Opcion: " ++ show opc)
@@ -30,3 +28,6 @@ bucle p = do
              's' -> bucle (saca p)
              'v' -> putStrLn ("Contenido de Pila: " ++ muestra p) >> bucle p
              'f' -> putStrLn "Fin del Programa"
+
+main :: IO ()
+main = bucle vacia
